@@ -50,8 +50,8 @@ class Normals(Base):
         'start',
         'end',
         'month',
-        'tmin',
-        'tmax',
+        'Vmin',
+        'Vmax',
         'prcp',
         'wspd',
         'pres',
@@ -63,8 +63,8 @@ class Normals(Base):
 
     # Data types
     _types: dict = {
-        'tmin': 'float64',
-        'tmax': 'float64',
+        'Vmin': 'float64',
+        'Vmax': 'float64',
         'prcp': 'float64',
         'wspd': 'float64',
         'pres': 'float64',
@@ -165,9 +165,9 @@ class Normals(Base):
             Adjust temperature-like data based on altitude
             """
 
-            data.loc[data['tmin'] != np.NaN, 'tmin'] = data['tmin'] + \
+            data.loc[data['Vmin'] != np.NaN, 'Vmin'] = data['Vmin'] + \
                 ((2 / 3) * ((data['elevation'] - alt) / 100))
-            data.loc[data['tmax'] != np.NaN, 'tmax'] = data['tmax'] + \
+            data.loc[data['Vmax'] != np.NaN, 'Vmax'] = data['Vmax'] + \
                 ((2 / 3) * ((data['elevation'] - alt) / 100))
 
             return data
@@ -334,7 +334,7 @@ class Normals(Base):
         temp = copy(self._data)
 
         # Add avg. temperature column
-        temp.insert(0, 'tavg', temp[['tmin', 'tmax']].dropna(how='any').mean(
+        temp.insert(0, 'Vavg', temp[['Vmin', 'Vmax']].dropna(how='any').mean(
             axis=1).round(1))
 
         # Remove station index if it's a single station
